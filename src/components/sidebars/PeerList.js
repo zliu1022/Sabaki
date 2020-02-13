@@ -2,6 +2,8 @@ import {h, Component} from 'preact'
 import classnames from 'classnames'
 
 import i18n from '../../i18n.js'
+import dialog from '../../modules/dialog'
+
 import {TextSpinner} from '../TextSpinner.js'
 import {ToolBar, ToolBarButton} from '../ToolBar.js'
 
@@ -142,10 +144,44 @@ export class EnginePeerList extends Component {
       })
     }
 
-    this.handleStartEngineButtonClick = evt => {
+    this.handleAttachEngineButtonClick = evt => {
       let {left, bottom} = evt.currentTarget.getBoundingClientRect()
 
       sabaki.openEnginesMenu({x: left, y: bottom})
+    }
+
+    this.handleStartStopGameButtonClick = evt => {
+      let {engineGameOngoing, attachedEngineSyncers} = this.props
+      let engineCount = attachedEngineSyncers.length
+
+      if (!!engineGameOngoing) {
+        sabaki.stopEngineGame()
+        return
+      }
+
+      if (engineCount === 0) {
+        dialog.showMessageBox(
+          t('Please attach one or more engines first.'),
+          'info'
+        )
+      } else {
+        let {blackEngineSyncerId, whiteEngineSyncerId} = this.props
+
+        if (blackEngineSyncerId == null) {
+          blackEngineSyncerId = attachedEngineSyncers[0].id
+        }
+
+        if (whiteEngineSyncerId == null) {
+          whiteEngineSyncerId = attachedEngineSyncers[1 % engineCount].id
+        }
+
+        sabaki.startEngineGame(
+          blackEngineSyncerId,
+          whiteEngineSyncerId,
+          sabaki.inferredState.gameTree,
+          sabaki.state.treePosition
+        )
+      }
     }
   }
 
@@ -154,7 +190,8 @@ export class EnginePeerList extends Component {
     selectedEngineSyncerId,
     blackEngineSyncerId,
     whiteEngineSyncerId,
-    analyzingEngineSyncerId
+    analyzingEngineSyncerId,
+    engineGameOngoing
   }) {
     return h(
       'div',
@@ -168,9 +205,18 @@ export class EnginePeerList extends Component {
 
         h(ToolBarButton, {
           icon: './node_modules/@primer/octicons/build/svg/play.svg',
-          tooltip: t('Start Engine…'),
+          tooltip: t('Attach Engine…'),
           menu: true,
-          onClick: this.handleStartEngineButtonClick
+          onClick: this.handleAttachEngineButtonClick
+        }),
+
+        h(ToolBarButton, {
+          icon: './node_modules/@primer/octicons/build/svg/zap.svg',
+          tooltip: !engineGameOngoing
+            ? t('Start Engine vs. Engine Game')
+            : t('Stop Game'),
+          checked: !!engineGameOngoing,
+          onClick: this.handleStartStopGameButtonClick
         })
       ),
 
