@@ -68,6 +68,7 @@ class GoBoard {
 
     let neighbors = move.getNeighbors(vertex)
     let deadStones = []
+    /*
     let deadNeighbors = neighbors.filter(
       n => move.get(n) === -sign && !move.hasLiberties(n)
     )
@@ -80,6 +81,7 @@ class GoBoard {
         deadStones.push(c)
       }
     }
+    */
 
     // Detect future ko
 
@@ -164,7 +166,7 @@ class GoBoard {
       for (let y = 0; y < this.height; y++) {
         let vertex = [x, y]
         if (this.get(vertex) === 0 || vertex in liberties) continue
-        if (!this.hasLiberties(vertex)) return false
+        //if (!this.hasLiberties(vertex)) return false
 
         this.getChain(vertex).forEach(v => (liberties[v] = true))
       }
