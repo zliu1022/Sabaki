@@ -1,5 +1,5 @@
 const fs = require('fs')
-const Board = require('@sabaki/go-board')
+const Board = require('../../components/GoBoard.js')
 const sgf = require('@sabaki/sgf')
 
 const t = require('../../i18n').context('fileformats')

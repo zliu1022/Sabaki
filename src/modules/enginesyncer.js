@@ -1,6 +1,6 @@
 const EventEmitter = require('events')
 const {dirname, resolve} = require('path')
-const Board = require('@sabaki/go-board')
+const Board = require('../components/GoBoard.js')
 const {Controller, ControllerStateTracker, Command} = require('@sabaki/gtp')
 const sgf = require('@sabaki/sgf')
 const argvsplit = require('argv-split')

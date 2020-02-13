@@ -1,4 +1,4 @@
-const Board = require('@sabaki/go-board')
+const Board = require('../components/GoBoard.js')
 const GameTree = require('@sabaki/immutable-gametree')
 const sgf = require('@sabaki/sgf')
 const helper = require('./helper')
