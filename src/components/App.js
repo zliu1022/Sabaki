@@ -1314,6 +1314,7 @@ class App extends Component {
 
       // Check for suicide
 
+      /*
       capture = vertexNeighbors.some(
         v => board.get(v) == -player && board.getLiberties(v).length == 1
       )
@@ -1342,6 +1343,7 @@ class App extends Component {
           return
       }
     }
+    */
 
     // Update data
 

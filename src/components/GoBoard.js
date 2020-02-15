@@ -99,6 +99,7 @@ class GoBoard {
 
     // Detect suicide
 
+    /*
     if (deadStones.length === 0 && liberties.length === 0) {
       if (preventSuicide) {
         throw new Error('Suicide prevented')
@@ -108,6 +109,7 @@ class GoBoard {
         move.set(c, 0).setCaptures(-sign, x => x + 1)
       }
     }
+    */
 
     return move
   }
