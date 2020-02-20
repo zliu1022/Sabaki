@@ -122,6 +122,7 @@ let defaults = {
   'game.navigation_sensitivity': 40,
   'game.show_ko_warning': true,
   'game.show_suicide_warning': true,
+  'game.gomoku': true,
   'gamechooser.show_delay': 100,
   'gamechooser.thumbnail_size': 153,
   'graph.delay': 200,

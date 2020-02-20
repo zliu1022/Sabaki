@@ -17,6 +17,7 @@ class GoBoard {
     this._players = [1, -1]
     this._captures = [0, 0]
     this._koInfo = {sign: 0, vertex: [-1, -1]}
+    this.gomoku = false
   }
 
   get([x, y]) {
@@ -68,20 +69,20 @@ class GoBoard {
 
     let neighbors = move.getNeighbors(vertex)
     let deadStones = []
-    /*
-    let deadNeighbors = neighbors.filter(
-      n => move.get(n) === -sign && !move.hasLiberties(n)
-    )
+    if (!this.gomoku) {
+      let deadNeighbors = neighbors.filter(
+        n => move.get(n) === -sign && !move.hasLiberties(n)
+      )
 
-    for (let n of deadNeighbors) {
-      if (move.get(n) === 0) continue
+      for (let n of deadNeighbors) {
+        if (move.get(n) === 0) continue
 
-      for (let c of move.getChain(n)) {
-        move.set(c, 0).setCaptures(sign, x => x + 1)
-        deadStones.push(c)
+        for (let c of move.getChain(n)) {
+          move.set(c, 0).setCaptures(sign, x => x + 1)
+          deadStones.push(c)
+        }
       }
     }
-    */
 
     // Detect future ko
 
@@ -99,18 +100,17 @@ class GoBoard {
 
     // Detect suicide
 
-    /*
-    if (deadStones.length === 0 && liberties.length === 0) {
-      if (preventSuicide) {
-        throw new Error('Suicide prevented')
-      }
+    if (!this.gomoku) {
+      if (deadStones.length === 0 && liberties.length === 0) {
+        if (preventSuicide) {
+          throw new Error('Suicide prevented')
+        }
 
-      for (let c of move.getChain(vertex)) {
-        move.set(c, 0).setCaptures(-sign, x => x + 1)
+        for (let c of move.getChain(vertex)) {
+          move.set(c, 0).setCaptures(-sign, x => x + 1)
+        }
       }
     }
-    */
-
     return move
   }
 
@@ -351,6 +351,11 @@ GoBoard.fromDimensions = (width, height = null) => {
   let signMap = [...Array(height)].map(_ => Array(width).fill(0))
 
   return new GoBoard(signMap)
+}
+
+GoBoard.setGomoku = gomoku => {
+  this.gomoku = gomoku
+  return
 }
 
 module.exports = GoBoard

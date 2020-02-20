@@ -629,6 +629,7 @@ class App extends Component {
     let handicapStones = Board.fromDimensions(width, height)
       .getHandicapPlacement(handicap)
       .map(sgf.stringifyVertex)
+    Board.setGomoku(setting.get('game.gomoku'))
 
     let sizeInfo = width === height ? width.toString() : `${width}:${height}`
     let date = new Date()
@@ -1314,36 +1315,36 @@ class App extends Component {
 
       // Check for suicide
 
-      /*
-      capture = vertexNeighbors.some(
-        v => board.get(v) == -player && board.getLiberties(v).length == 1
-      )
-
-      suicide =
-        !capture &&
-        vertexNeighbors
-          .filter(v => board.get(v) == player)
-          .every(v => board.getLiberties(v).length == 1) &&
-        vertexNeighbors.filter(v => board.get(v) == 0).length == 0
-
-      if (suicide && setting.get('game.show_suicide_warning')) {
-        if (
-          dialog.showMessageBox(
-            t(
-              [
-                'You are about to play a suicide move.',
-                'This is invalid in some rulesets.'
-              ].join('\n')
-            ),
-            'info',
-            [t('Play Anyway'), t('Don’t Play')],
-            1
-          ) != 0
+      if (!setting.get('game.gomoku')) {
+        capture = vertexNeighbors.some(
+          v => board.get(v) == -player && board.getLiberties(v).length == 1
         )
-          return
+
+        suicide =
+          !capture &&
+          vertexNeighbors
+            .filter(v => board.get(v) == player)
+            .every(v => board.getLiberties(v).length == 1) &&
+          vertexNeighbors.filter(v => board.get(v) == 0).length == 0
+
+        if (suicide && setting.get('game.show_suicide_warning')) {
+          if (
+            dialog.showMessageBox(
+              t(
+                [
+                  'You are about to play a suicide move.',
+                  'This is invalid in some rulesets.'
+                ].join('\n')
+              ),
+              'info',
+              [t('Play Anyway'), t('Don’t Play')],
+              1
+            ) != 0
+          )
+            return
+        }
       }
     }
-    */
 
     // Update data
 
@@ -3045,6 +3046,7 @@ class App extends Component {
       pass = false
 
       if (responseContent.toLowerCase() === 'resign') {
+        console.log('resign')
         dialog.showMessageBox(
           t(p => `${p.engineName} has resigned.`, {
             engineName: playerSyncer.engine.name

@@ -137,6 +137,10 @@ class GeneralTab extends Component {
           text: t('Show suicide warning')
         }),
         h(PreferencesItem, {
+          id: 'game.gomoku',
+          text: t('Gomoku support')
+        }),
+        h(PreferencesItem, {
           id: 'edit.show_removenode_warning',
           text: t('Show remove node warning')
         }),
